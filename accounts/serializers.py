@@ -32,3 +32,10 @@ class ExploreSerializer(serializers.ModelSerializer):
             "business_category", "country", "region", "city",
             "followers_count", "profile_image", "is_verified"
         ]
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'business_name', 'profile_image', 'account_type']
+        read_only_fields = ['id', 'username', 'business_name', 'profile_image', 'account_type']
+        

@@ -52,8 +52,7 @@ class User(AbstractUser):
     location = models.CharField(max_length=150, blank=True, null=True)
     contact_number = models.CharField(max_length=20, blank=True, null=True)
 
-    # Status fields
-    followers_count = models.PositiveIntegerField(default=0)
+
     is_verified = models.BooleanField(default=False)
     is_email_verified = models.BooleanField(default=False)
     verification_badge = models.BooleanField(default=False)

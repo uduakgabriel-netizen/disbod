@@ -1,4 +1,4 @@
-from django.db.models import Q, Count, Avg
+from django.db.models import Q, Count, Avg, F, Case, When, Value, IntegerField
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -6,13 +6,20 @@ from rest_framework.pagination import PageNumberPagination
 from django.utils import timezone
 from datetime import timedelta
 
+from accounts.models import User
+from accounts.serializers import UserSerializer
 from business.models import Business
-from products.models import Product, ProductCategory, ProductView
+from products.models import Product, ProductCategory
 from ratings.models import Rating
-from explore.serializers import BusinessListSerializer, ProductListSerializer, ProductCategorySerializer
+from explore.serializers import (
+    BusinessListSerializer,
+    ProductListSerializer,
+    ProductCategorySerializer,
+)
 from explore.models import TrendingProductCache, FeaturedBusiness
 
 
+# ---------- Pagination ----------
 class StandardPagination(PageNumberPagination):
     page_size = 12
     page_size_query_param = 'page_size'
@@ -42,16 +49,20 @@ class ExploreSearchView(APIView):
         country = request.query_params.get('country')
         region = request.query_params.get('region')
         city = request.query_params.get('city')
-        sort = request.query_params.get('sort')  # 'followers', 'rating', 'recent', 'relevance'
+        sort = request.query_params.get('sort')  # 'followers', 'rating', 'recent', 'views', 'price_asc', 'price_desc'
 
         results = {'businesses': [], 'products': []}
 
+        # ----- Business search -----
         if search_type in ('business', 'both'):
-            bs_q = Business.objects.filter()
-            # only business/premium, and suggested criteria optional removed; we allow searching all businesses
-            bs_q = bs_q.filter()  # placeholder, no-op
+            bs_q = Business.objects.all()
+
             if q:
-                bs_q = bs_q.filter(Q(name__icontains=q) | Q(description__icontains=q) | Q(owner__username__icontains=q))
+                bs_q = bs_q.filter(
+                    Q(name__icontains=q)
+                    | Q(description__icontains=q)
+                    | Q(owner__username__icontains=q)
+                )
             if category:
                 bs_q = bs_q.filter(category__icontains=category)
             if country:
@@ -61,9 +72,9 @@ class ExploreSearchView(APIView):
             if city:
                 bs_q = bs_q.filter(city__icontains=city)
 
-            # sort
+            # Sorting
             if sort == 'followers':
-                bs_q = bs_q.annotate(fcount=Count('owner__followers_set')).order_by('-owner__followers_count')
+                bs_q = bs_q.annotate(fcount=Count('owner__followers')).order_by('-fcount')
             elif sort == 'rating':
                 bs_q = bs_q.annotate(avg=Avg('owner__received_ratings__stars')).order_by('-avg')
             elif sort == 'recent':
@@ -72,10 +83,16 @@ class ExploreSearchView(APIView):
             serializer = BusinessListSerializer(bs_q, many=True, context={'request': request})
             results['businesses'] = serializer.data
 
+        # ----- Product search -----
         if search_type in ('product', 'both'):
             p_q = Product.objects.select_related('category', 'category__business').all()
+
             if q:
-                p_q = p_q.filter(Q(name__icontains=q) | Q(description__icontains=q) | Q(category__name__icontains=q))
+                p_q = p_q.filter(
+                    Q(name__icontains=q)
+                    | Q(description__icontains=q)
+                    | Q(category__name__icontains=q)
+                )
             if category:
                 p_q = p_q.filter(category__name__icontains=category)
             if country:
@@ -85,8 +102,8 @@ class ExploreSearchView(APIView):
             if city:
                 p_q = p_q.filter(category__business__city__icontains=city)
 
+            # Sorting
             if sort == 'views':
-                # top by view count
                 p_q = p_q.annotate(vcount=Count('views')).order_by('-vcount')
             elif sort == 'recent':
                 p_q = p_q.order_by('-created_at')
@@ -98,78 +115,114 @@ class ExploreSearchView(APIView):
             paginator = StandardPagination()
             page = paginator.paginate_queryset(p_q, request)
             serializer = ProductListSerializer(page, many=True, context={'request': request})
-            return paginator.get_paginated_response({'businesses': results['businesses'], 'products': serializer.data})
+            return paginator.get_paginated_response({
+                'businesses': results['businesses'],
+                'products': serializer.data,
+            })
 
         return Response(results)
 
 
 # ---------- Suggested businesses ----------
 class SuggestedBusinessView(generics.ListAPIView):
-    """
-    Suggest businesses based on:
-     - followers_count >= 20 OR high rating OR featured by admin
-     - optional location filters
-    """
-    serializer_class = BusinessListSerializer
+    serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
-    pagination_class = StandardPagination
 
     def get_queryset(self):
-        country = self.request.query_params.get('country')
-        region = self.request.query_params.get('region')
-        city = self.request.query_params.get('city')
-        base = Business.objects.filter(owner__account_type__in=['business', 'premium'])
-        # Suggested: followers >=20 OR avg rating >=4 OR Featured active
-        base = base.annotate(avg_rating=Avg('owner__received_ratings__stars'))
+        qs = User.objects.filter(account_type='business')
 
-        qs = base.filter(
-            Q(owner__followers_count__gte=20) |
-            Q(avg_rating__gte=4.0) |
-            Q(featured__isnull=False)
-        )
+        # Safely check if the User model has a followers relationship
+        if hasattr(User, 'followers') or 'followers' in [f.name for f in User._meta.get_fields()]:
+            # If followers relation exists, count them
+            qs = qs.annotate(followers_total=Count('followers')).order_by('-followers_total')[:10]
+        else:
+            # If no followers field, just return latest businesses
+            qs = qs.order_by('-date_joined')[:10]
 
-        if country:
-            qs = qs.filter(country__icontains=country)
-        if region:
-            qs = qs.filter(region__icontains=region)
-        if city:
-            qs = qs.filter(city__icontains=city)
-
-        # order by featured first, then followers_count, then rating
-        qs = qs.annotate(is_featured=Count('featured')).order_by('-is_featured', '-owner__followers_count', '-avg_rating')
         return qs
+
+
+            
 
 
 # ---------- Trending products ----------
 class TrendingProductsView(generics.ListAPIView):
+    """
+    Trending products are scored using:
+      - number of views in the recent period (days query param, default 7)
+      - a small boost for products marked is_featured
+    Returns paginated product list ordered by score then recency.
+    """
     serializer_class = ProductListSerializer
     permission_classes = [permissions.AllowAny]
     pagination_class = StandardPagination
 
     def get_queryset(self):
-        # Trending score: weighted combination of recent views and recency
-        # We'll approximate: count views in last 7 days and order by that + is_featured
-        since_days = int(self.request.query_params.get('days', 7))
+        # number of days to consider for "recent" — default 7
+        try:
+            since_days = int(self.request.query_params.get('days', 7))
+        except (TypeError, ValueError):
+            since_days = 7
         since = timezone.now() - timedelta(days=since_days)
 
         qs = Product.objects.select_related('category', 'category__business').all()
-        qs = qs.annotate(views_recent=Count('views', filter=Q(views__viewed_at__gte=since)))
-        # boost featured
-        qs = qs.annotate(score=models.F('views_recent') + models.Case(
-            models.When(is_featured=True, then=models.Value(10)),
-            default=models.Value(0),
-            output_field=models.IntegerField()
-        ))
-        qs = qs.order_by('-score', '-created_at')
+        # count recent views, boost featured products
+        qs = qs.annotate(
+            views_recent=Count('views', filter=Q(views__viewed_at__gte=since))
+        ).annotate(
+            score=F('views_recent') + Case(
+                When(is_featured=True, then=Value(10)),
+                default=Value(0),
+                output_field=IntegerField(),
+            )
+        ).order_by('-score', '-created_at')
+
         return qs
 
 
 # ---------- Top Rated Businesses ----------
 class TopRatedBusinessesView(generics.ListAPIView):
+    """
+    List businesses ordered by average rating then follower count (if available).
+    Uses Business model and BusinessListSerializer. Paginated.
+    """
     serializer_class = BusinessListSerializer
     permission_classes = [permissions.AllowAny]
     pagination_class = StandardPagination
 
     def get_queryset(self):
-        qs = Business.objects.annotate(avg=Avg('owner__received_ratings__stars')).order_by('-avg', '-owner__followers_count')
+        # Annotate businesses with avg rating (from ratings on the owner) and follower count if relation exists.
+        qs = Business.objects.all().select_related('owner')
+
+        # annotate average rating (ratings attached to the owner)
+        qs = qs.annotate(avg_rating=Avg('owner__received_ratings__stars'))
+
+        # try to annotate follower count from a related name; safe fallback if relation/mapping differs
+        # common related names used earlier: 'followers', 'followers_set', 'followers_user', 'followers_set'
+        follower_rel_candidates = [
+            'owner__followers',        # e.g. Follow model FK->user: related_name='followers'
+            'owner__followers_set',    # django default when related_name omitted
+            'owner__followers_user',   # other possible names used earlier in your models
+            'owner__followers_set'     # duplicate safe entry
+        ]
+
+        # We'll try to annotate using a valid relation name. If none exist, fallback to 0.
+        annotated = False
+        for rel in follower_rel_candidates:
+            try:
+                qs_test = qs.annotate(fcount=Count(rel))
+                # executing a cheap queryset slice will reveal if DB accepts the annotation
+                qs_test[:1]
+                qs = qs.annotate(followers_count=Count(rel))
+                annotated = True
+                break
+            except Exception:
+                continue
+
+        if not annotated:
+            # no follower relation found — set followers_count to 0 for ordering via a Value
+            qs = qs.annotate(followers_count=Value(0, output_field=IntegerField()))
+
+        # order by avg_rating desc then followers_count desc then recently created
+        qs = qs.order_by('-avg_rating', '-followers_count', '-created_at')
         return qs

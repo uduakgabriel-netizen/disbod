@@ -26,7 +26,7 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/auth/', include('accounts.urls')),
+    path('api/accounts/', include('accounts.urls')),
     path('api/business/', include('business.urls')),
     path('api/products/', include('products.urls')),
     path('api/notifications/', include('notifications.urls')),
@@ -41,3 +41,4 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
