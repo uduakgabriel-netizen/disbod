@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'chats',
     'business',
+    'core',
     'ratings',
     'explore',
     'accounts',
@@ -75,6 +76,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.UserSuspensionMiddleware',
+
 ]
 
 ROOT_URLCONF = 'disbod.urls'
@@ -153,17 +156,34 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import os
 
-# # Static files (CSS, JS, Images)
-# # STATIC_URL = '/static/'
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Static files (CSS, JS, Images)
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# # Media files (User uploads)
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Media files (User uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Templates directory
-TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'templates')]
+# # Templates directory
+# TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR,'core', 'templates')]
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'core' / 'templates'],  # 👈 Important
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 
 

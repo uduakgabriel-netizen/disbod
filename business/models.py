@@ -3,6 +3,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
+from mediafiles.models import MediaFile
 
 User = settings.AUTH_USER_MODEL
 
@@ -40,3 +41,15 @@ class BusinessVerificationRequest(models.Model):
 
     def __str__(self):
         return f"Verification request for {self.business.name}"
+
+
+class BusinessPost(models.Model):
+    business = models.ForeignKey('Business', on_delete=models.CASCADE, related_name='posts')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField(blank=True)
+    media = models.ManyToManyField(MediaFile, blank=True)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.business.name} post by {self.author.username}"

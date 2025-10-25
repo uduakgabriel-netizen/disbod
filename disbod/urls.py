@@ -23,16 +23,20 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+   
     path('api/accounts/', include('accounts.urls')),
     path('api/business/', include('business.urls')),
     path('api/products/', include('products.urls')),
     path('api/notifications/', include('notifications.urls')),
     path('api/chats/', include('chats.urls')),
+    path('', include('core.urls')),  
     path('api/explore/', include('explore.urls')),
     path('api/ratings/', include('ratings.urls')),
+    path('api/mediafiles/', include('mediafiles.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
@@ -41,4 +45,4 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

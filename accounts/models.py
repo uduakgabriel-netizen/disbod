@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
+
 
 
 
@@ -57,6 +59,54 @@ class User(AbstractUser):
     is_email_verified = models.BooleanField(default=False)
     verification_badge = models.BooleanField(default=False)
     is_suspended = models.BooleanField(default=False)
+    
+    
+    
+    # 🔒 Admin management fields
+    is_suspended = models.BooleanField(default=False)
+    suspended_until = models.DateTimeField(blank=True, null=True)
+    caution_message = models.TextField(blank=True, null=True)
+    upgraded_until = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.username
+
+    # ✅ Admin logic methods
+
+    def suspend(self, days=7):
+        """Suspend the user for a certain number of days."""
+        self.is_suspended = True
+        self.suspended_until = timezone.now() + timedelta(days=days)
+        self.save()
+
+    def unsuspend(self):
+        """Reactivate user account."""
+        self.is_suspended = False
+        self.suspended_until = None
+        self.save()
+
+    def upgrade(self, plan_type='premium', days=30):
+        """Upgrade user to premium or business for a certain duration."""
+        self.account_type = plan_type
+        self.upgraded_until = timezone.now() + timedelta(days=days)
+        self.save()
+
+    def downgrade_if_expired(self):
+        """Automatically revert user to normal if upgrade period expired."""
+        if self.upgraded_until and timezone.now() > self.upgraded_until:
+            self.account_type = 'normal'
+            self.upgraded_until = None
+            self.save()
+
+    def caution(self, message):
+        """Send a caution message to the user."""
+        self.caution_message = message
+        self.save()
+
+    def block(self):
+        """Permanently block (deactivate) the user."""
+        self.is_active = False
+        self.save()
 
     def __str__(self):
         return self.username
@@ -110,3 +160,5 @@ class UserRating(models.Model):
 
     def __str__(self):
         return f"{self.rated_by.username} rated {self.rated_user.username} ({self.rating})"
+    
+    

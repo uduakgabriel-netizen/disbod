@@ -1,7 +1,8 @@
 # business/serializers.py
 
 from rest_framework import serializers
-from .models import Business, BusinessVerificationRequest
+from .models import Business, BusinessVerificationRequest, BusinessPost
+from mediafiles.serializers import MediaFileSerializer
 
 class BusinessSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -26,3 +27,12 @@ class BusinessVerificationRequestSerializer(serializers.ModelSerializer):
             'id', 'business', 'business_name', 'message', 'is_approved',
             'reviewed_by', 'reviewed_by_name', 'created_at', 'updated_at'
         ]
+
+
+class BusinessPostSerializer(serializers.ModelSerializer):
+    media = MediaFileSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BusinessPost
+        fields = ['id', 'business', 'author', 'content', 'media', 'likes', 'created_at']
+        read_only_fields = ['author', 'likes', 'created_at']
