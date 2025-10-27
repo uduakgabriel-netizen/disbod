@@ -1,30 +1,60 @@
-{%extends "partials/header.html" %}
-{% block content %}
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-content">
-      <h2>Empowering Businesses, Connecting People</h2>
-      <p>Disbod helps businesses and individuals connect, grow, and thrive together in one digital community.</p>
-      <a href="/register/" class="btn">Get Started</a>
-    </div>
-  </section>
 
-  <!-- Features Section -->
-  <section class="features">
-    <h2>Why Join Disbod?</h2>
-    <div class="feature-grid">
-      <div class="feature">
-        <h3>📈 Promote Your Business</h3>
-        <p>Showcase your products and reach thousands of potential clients daily.</p>
-      </div>
-      <div class="feature">
-        <h3>💬 Connect With Others</h3>
-        <p>Build real connections through chat, comments, and collaboration.</p>
-      </div>
-      <div class="feature">
-        <h3>🎥 Share Reels</h3>
-        <p>Post short videos to engage your audience and grow your followers.</p>
-      </div>
-    </div>
-  </section>
+{%extends "partials/header.html" %}
+<!DOCTYPE html>
+
+{% block content %}
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Your Community’s Next Favorite **Local Discovery** Platform.</h1>
+                <p>Connect with local creators, businesses, and unique products through visual feeds, direct chat, and community marketplaces.</p>
+                <div class="hero-ctas">
+                    <a href="signup" class="btn btn-cta">Start Exploring Now</a>
+                    <p class="no-card">No credit card required.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="explore" class="content-grid-section">
+            <div class="content-grid-container">
+                
+                <div class="content-card card-visual wide" data-color="primary">
+                    <div class="card-text">
+                        <h3>Vibrant Feeds</h3>
+                        <p>Browse products, reels, and updates from the people you follow.</p>
+                    </div>
+                    <img src="images/card-visual-1.jpg" alt="Feed Example" class="card-img-overlap">
+                </div>
+
+                <div class="content-card card-stat" data-color="secondary">
+                    <h2>75k+</h2>
+                    <p>Unique local businesses and creators connected.</p>
+                </div>
+
+                <div class="content-card card-visual tall" data-color="teal-gradient">
+                    <div class="card-text">
+                        <h3>Private Messaging</h3>
+                        <p>Chat instantly with businesses to ask questions or place custom orders.</p>
+                    </div>
+                    <img src="images/card-chat-preview.webp" alt="Chat UI Example" class="card-img-chat">
+                </div>
+                
+                <div class="content-card card-stat" data-color="accent">
+                    <h2>1000+</h2>
+                    <p>Products listed daily across all regions.</p>
+                </div>
+
+                <div class="content-card card-feature" data-color="primary">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Regional Discovery</h3>
+                    <p>Find what's trending and where to shop based on your location.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="trust-section">
+            <p>Trusted by **8,500+** sellers and creators to build better, stronger community connections.</p>
+        </section>
+    </main>
 {% endblock %}

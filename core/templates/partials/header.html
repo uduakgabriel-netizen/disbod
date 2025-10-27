@@ -1,34 +1,130 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to Disbod</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-  </head>
-  <body>
-    <!-- Navbar -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disbod - The Social Marketplace.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <!-- Separate CSS Files -->
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/auth.css' %}">
+
+</head>
+<body>
+
+    <!-- ========================================
+         NAVIGATION BAR (Separated & Fixed)
+    ======================================== -->
     <header class="navbar">
-      <div class="container">
-        <h1 class="logo">Disbod</h1>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/explore/">Explore</a></li>
-            <li><a href="/login/">Login</a></li>
-            <li><a href="/register/">Join</a></li>
-          </ul>
-        </nav>
-      </div>
+        <div class="navbar-content">
+            <div class="logo">
+                <span class="logo-primary">Dis</span><span class="logo-secondary">bod</span>
+            </div>
+
+            <nav class="nav-links">
+                <a href="signup" class="nav-item">Explore</a>
+                <a href="#about" class="nav-item">Businesses</a>
+                <a href="#pricing" class="nav-item">How It Works</a>
+            </nav>
+
+            <div class="auth-buttons">
+                <a href="login" class="btn btn-login">Log In</a>
+                <a href="signup" class="btn btn-signup">Sign Up / Post</a>
+            </div>
+
+            <button class="mobile-menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
     </header>
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disbod - The Social Marketplace.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-content">
+            <div class="logo">
+                <span class="logo-primary">Dis</span><span class="logo-secondary">bod</span>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#explore" class="nav-item">Explore</a>
+                <a href="#about" class="nav-item">Businesses</a>
+                <a href="#pricing" class="nav-item">How It Works</a>
+            </nav>
+
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-login">Log In</a>
+                <a href="#" class="btn btn-signup">Sign Up / Post</a>
+            </div>
+
+            <button class="mobile-menu-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+        </div>
+    </header> {% endcomment %}
     <!-- Main Content -->
     <main>
       {% block content %}{% endblock %}
     </main>
     <!-- Footer -->
-    <footer>
-      <p>&copy; 2025 Disbod. All Rights Reserved.</p>
+  <footer class="footer">
+        <div class="footer-content-container">
+            <div class="footer-col footer-branding">
+                <div class="logo">
+                    <span class="logo-primary">Dis</span><span class="logo-secondary">bod</span>
+                </div>
+                <p>The new way to discover local commerce.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="#">Home</a>
+                <a href="#">Explore Feeds</a>
+                <a href="#">Seller Hub</a>
+                <a href="#">User Guide</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact Support</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+
+            <div class="footer-col footer-newsletter">
+                <h4>Join Our Newsletter</h4>
+                <p>Get the latest Disbod updates and deals.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit" class="btn btn-secondary-cta">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Disbod. All rights reserved.</p>
+        </div>
     </footer>
+
   </body>
 </html>

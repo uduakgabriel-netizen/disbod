@@ -1,0 +1,33 @@
+
+{%extends 'partials/header.html'%}
+{%load static%}
+
+<head>
+    <link rel="stylesheet" href="{% static '/css/login.css' %}"> 
+</head>
+{% block content %}
+<main>
+    <div class="auth-container">
+    <!-- COLUMN 1: Welcome -->
+    <div class="welcome-section">
+        <h1>HELLO!</h1>
+        <p>This is the stylish left panel.</p>
+        <button class="signup-btn" style="background: white; color: #A855F7;">LOGIN</button>
+    </div>
+
+    <!-- COLUMN 2: Form -->
+    <div class="form-section">
+        <h1>LOGIN</h1>
+        <input type="email" placeholder="Email" class="form-input">
+        <input type="password" placeholder="Create a password" class="form-input">
+        <button class="signup-btn">Login</button>
+        <p style="margin-top: 20px; font-size: 14px;">Don't have an account? <a href="#" style="color: #A855F7;">Sign Up Here</a></p>
+    </div>
+
+    <!-- COLUMN 3: Image -->
+    <div class="image-panel">
+        {% comment %} <img src="../../static/img/nice.jpg" alt="Signup Illustration"> {% endcomment %}
+    </div>
+    </div>
+</main>
+{% endblock %}
