@@ -1,367 +1,172 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-
-
-.logo {
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.logo-primary {
-    color: #1A1A1A;
-}
-
-.logo-secondary { 
-    background: linear-gradient(135deg, #A855F7, #EC4899, #FB923C);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-/* ========================================
-   AUTHENTICATION CONTAINER
-======================================== */
 .auth-container {
-
-    background: white;
-    background-image: url(img/);
-    border-radius: 30px;
-    box-shadow: 0 20px 60px rgba(238, 60, 60, 0.3);
-    /* overflow: hidden; */
-    display: flex;
-    max-width: 900px;
-    width: 100%;
-    margin-right: auto;
-    min-height: 5px;
-    margin-top: 80px;
-    position: relative;
-    animation: slideIn 0.6s ease;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  min-height: 500px;
+  margin-top: 100px;
+  margin-bottom: 20px;
+  position: relative;
 }
 
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-.nice{
-    background-color: red;
-    
-}
-
-/* ========================================
-   WELCOME SECTION (Left Side)
-======================================== */
-.welcome-section {
-    flex: 1;
-    padding: 60px 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #A855F7 0%, #EC4899 50%, #FB923C 100%);
-    color: white;
-    position: relative;
-    clip-path: ellipse(80% 100% at 0% 50%);
-    z-index: 1;
-}
-
-.welcome-section h1 {
-    font-size: 48px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-}
-
-.welcome-section p {
-    font-size: 18px;
-    margin-bottom: 30px;
-    text-align: center;
-    opacity: 0.95;
-    line-height: 1.6;
-}
-
-.signin-btn {
-    padding: 15px 40px;
-    background: white;
-    color: #A855F7;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.signin-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255,255,255,0.3);
-}
-
-/* ========================================
-   FORM SECTION (Right Side)
-======================================== */
 .form-section {
-    flex: 1;
-    padding: 60px 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: white;
-    position: relative;
-    z-index: 2;
+  flex: 1;
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  position: relative;
+  z-index: 2;
+}
+
+.welcome-section {
+  flex: 1;
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #fb923c 100%);
+  color: white;
+  position: relative;
+  clip-path: ellipse(100% 100% at 100% 50%);
 }
 
 .form-section h1 {
-    font-size: 32px;
-    font-weight: 700;
-    color: #1F2937;
-    margin-bottom: 40px;
-    text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 40px;
 }
 
-form {
-    width: 100%;
-    max-width: 350px;
-}
-
-/* ========================================
-   INPUT FIELDS
-======================================== */
 .input-group {
-    width: 100%;
-    margin-bottom: 20px;
-    position: relative;
-    transition: transform 0.3s ease;
-}
-
-.input-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-    margin-bottom: 8px;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 20px;
 }
 
 .input-group input {
-    width: 100%;
-    padding: 15px 20px;
-    border: 2px solid #E5E7EB;
-    border-radius: 12px;
-    font-size: 15px;
-    font-family: 'Poppins', sans-serif;
-    transition: all 0.3s ease;
-    outline: none;
+  width: 100%;
+  padding: 15px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  outline: none;
 }
 
 .input-group input:focus {
-    border-color: #A855F7;
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
 }
 
 .input-group input::placeholder {
-    color: #9CA3AF;
+  color: #9ca3af;
 }
 
-/* Password Toggle Icon */
-.password-toggle {
-    position: absolute;
-    right: 15px;
-    top: 43px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #9CA3AF;
-    user-select: none;
-    transition: color 0.3s ease;
-}
-
-.password-toggle:hover {
-    color: #A855F7;
-}
-
-/* ========================================
-   SUBMIT BUTTON
-======================================== */
 .submit-btn {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
+  width: 100%;
+  max-width: 320px;
+  padding: 15px;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
 .submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
-    background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
 }
 
-.submit-btn:active {
-    transform: translateY(0);
+.welcome-section h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* ========================================
-   TOGGLE LINK
-======================================== */
+.welcome-section p {
+  font-size: 18px;
+  margin-bottom: 30px;
+  text-align: center;
+  opacity: 0.95;
+}
+
+.signup-btn {
+  padding: 15px 40px;
+  background: white;
+  color: #a855f7;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signup-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+}
+
 .toggle-link {
-    margin-top: 20px;
-    color: #6B7280;
-    font-size: 14px;
-    text-align: center;
+  margin-top: 20px;
+  color: #6b7280;
+  font-size: 14px;
 }
 
 .toggle-link a {
-    color: #A855F7;
-    text-decoration: none;
-    font-weight: 600;
+  color: #a855f7;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .toggle-link a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-/* ========================================
-   TERMS & PRIVACY
-======================================== */
-.terms-text {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #9CA3AF;
-    text-align: center;
-    line-height: 1.5;
+/* Registration page (hidden by default) */
+.registration-container {
+  display: none;
 }
 
-.terms-text a {
-    color: #A855F7;
-    text-decoration: none;
+.registration-container .welcome-section {
+  order: -1;
+  clip-path: ellipse(100% 80% at 0% 50%);
 }
 
-.terms-text a:hover {
-    text-decoration: underline;
-}
-
-/* ========================================
-   ERROR MESSAGE
-======================================== */
-.error-message {
-    background: #FEE2E2;
-    border: 1px solid #FCA5A5;
-    color: #DC2626;
-    padding: 12px 15px;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-bottom: 20px;
-    display: none;
-}
-
-.error-message.show {
-    display: block;
-    animation: shake 0.4s ease;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    75% { transform: translateX(10px); }
-}
-
-/* ========================================
-   SUCCESS MESSAGE
-======================================== */
-.success-message {
-    background: #D1FAE5;
-    border: 1px solid #6EE7B7;
-    color: #047857;
-    padding: 12px 15px;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-bottom: 20px;
-    display: none;
-}
-
-.success-message.show {
-    display: block;
-    animation: slideDown 0.4s ease;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ========================================
-   RESPONSIVE DESIGN
-======================================== */
 @media (max-width: 768px) {
-    .auth-container {
-        flex-direction: column;
-        margin-top: 100px;
-        max-width: 500px;
-    }
+  .auth-container {
+    flex-direction: column;
+    margin-top: 100px;
+  }
 
-    .welcome-section {
-        clip-path: none;
-        padding: 40px 30px;
-    }
+  .welcome-section {
+    clip-path: none;
+    padding: 40px 30px;
+  }
 
-    .form-section {
-        padding: 40px 30px;
-    }
+  .registration-container .welcome-section {
+    clip-path: none;
+    order: 0;
+  }
 
-    .welcome-section h1 {
-        font-size: 36px;
-    }
+  .form-section {
+    padding: 40px 30px;
+  }
 
-    .form-section h1 {
-        font-size: 28px;
-    }
-
-    .navbar {
-        padding: 15px 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .auth-container {
-        margin-top: 80px;
-    }
-
-    .welcome-section {
-        padding: 30px 20px;
-    }
-
-    .form-section {
-        padding: 30px 20px;
-    }
-
-    form {
-        max-width: 100%;
-    }
-
-    .logo {
-        font-size: 20px;
-    }
+  .navbar {
+    padding: 15px 20px;
+  }
 }

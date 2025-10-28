@@ -1,33 +1,90 @@
+{%extends "partials/header.html"%}
+{% load static %}
 
-{%extends 'partials/header.html'%}
-{%load static%}
+    {%block extra_head %}<link rel="stylesheet" href="{% static 'css/auth.css' %}">{%endblock extra_head %}
+    {% block content %}
 
-<head>
-    <link rel="stylesheet" href="{% static '/css/login.css' %}"> 
-</head>
-{% block content %}
-<main>
-    <div class="auth-container">
-    <!-- COLUMN 1: Welcome -->
-    <div class="welcome-section">
-        <h1>HELLO!</h1>
-        <p>This is the stylish left panel.</p>
-        <button class="signup-btn" style="background: white; color: #A855F7;">LOGIN</button>
+    <!-- Login Container -->
+    <div class="auth-container" id="loginContainer">
+        <div class="form-section">
+            <h1>SIGN IN</h1>
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="submit-btn">Sign In</button>
+            </form>
+            <div class="toggle-link">
+                Don't have an account? <a href="#" onclick="showRegistration()">Sign Up</a>
+            </div>
+        </div>
+
+        <div class="welcome-section">
+            <h1>WELCOME!</h1>
+            <p>Register here if you don't have an account.</p>
+            <button class="signup-btn" onclick="showRegistration()">SIGN UP</button>
+        </div>
     </div>
 
-    <!-- COLUMN 2: Form -->
-    <div class="form-section">
-        <h1>LOGIN</h1>
-        <input type="email" placeholder="Email" class="form-input">
-        <input type="password" placeholder="Create a password" class="form-input">
-        <button class="signup-btn">Login</button>
-        <p style="margin-top: 20px; font-size: 14px;">Don't have an account? <a href="#" style="color: #A855F7;">Sign Up Here</a></p>
+    <!-- Registration Container -->
+    <div class="auth-container registration-container" id="registrationContainer">
+        <div class="welcome-section">
+            <h1>HELLO!</h1>
+            <p>Already have an account? Sign in here.</p>
+            <button class="signup-btn" onclick="showLogin()">SIGN IN</button>
+        </div>
+
+        <div class="form-section">
+            <h1>SIGN UP</h1>
+            <form id="registrationForm">
+                <div class="input-group">
+                    <input type="text" placeholder="First Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" placeholder="Last Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="submit-btn">Sign Up</button>
+            </form>
+            <div class="toggle-link">
+                Already have an account? <a href="#" onclick="showLogin()">Sign In</a>
+            </div>
+        </div>
     </div>
 
-    <!-- COLUMN 3: Image -->
-    <div class="image-panel">
-        {% comment %} <img src="../../static/img/nice.jpg" alt="Signup Illustration"> {% endcomment %}
-    </div>
-    </div>
-</main>
-{% endblock %}
+    <script>
+        // Toggle between login and registration
+        function showRegistration() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('registrationContainer').style.display = 'flex';
+        }
+
+        function showLogin() {
+            document.getElementById('registrationContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'flex';
+        }
+
+        // Form submissions (connect to your Django backend)
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add your Django login endpoint here
+            console.log('Login form submitted');
+            // Example: fetch('/api/login/', { method: 'POST', body: formData })
+        });
+
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add your Django registration endpoint here
+            console.log('Registration form submitted');
+            // Example: fetch('/api/register/', { method: 'POST', body: formData })
+        });
+    </script>
+{% endblock content %}

@@ -11,10 +11,8 @@
     <!-- Separate CSS Files -->
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-   
+    <link rel="stylesheet" href="{% static 'css/base.css' %}"> 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    
-    {% block extra_head %}{% endblock %}
 
 </head>
 <body>
@@ -44,39 +42,6 @@
             </button>
         </div>
     </header>
-
-{% comment %} <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disbod - The Social Marketplace.</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-
-    <header class="navbar">
-        <div class="navbar-content">
-            <div class="logo">
-                <span class="logo-primary">Dis</span><span class="logo-secondary">bod</span>
-            </div>
-
-            <nav class="nav-links">
-                <a href="#explore" class="nav-item">Explore</a>
-                <a href="#about" class="nav-item">Businesses</a>
-                <a href="#pricing" class="nav-item">How It Works</a>
-            </nav>
-
-            <div class="auth-buttons">
-                <a href="#" class="btn btn-login">Log In</a>
-                <a href="#" class="btn btn-signup">Sign Up / Post</a>
-            </div>
-
-            <button class="mobile-menu-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
-        </div>
-    </header> {% endcomment %}
     <!-- Main Content -->
     <main>
       {% block content %}{% endblock %}
@@ -130,3 +95,4 @@
 
   </body>
 </html>
+ 
